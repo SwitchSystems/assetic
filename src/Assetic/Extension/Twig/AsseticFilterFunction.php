@@ -6,8 +6,8 @@ class AsseticFilterFunction
 {
     public static function make(AsseticExtension $extension, $name, $options = [])
     {
-        return new TwigFunction($name, function ($input, array $options) use ($extension, $name) {
-            return $extension->getFilterInvoker($name)->invoke($input, $options);
-        }, $options);
+        return new TwigFunction($name, null, array_merge($options, [
+            'node_class' => '\Assetic\Extension\Twig\AsseticFilterNode',
+        ]));
     }
 }
