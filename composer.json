@@ -1,8 +1,8 @@
 {
     "name": "assetic/framework",
     "description": "Asset Management for PHP",
-    "keywords": [ "assets", "compression", "minification" ],
-    "homepage": "https://github.com/JaxWilko/assetic",
+    "keywords": ["assets", "compression", "minification"],
+    "homepage": "https://github.com/assetic-php/assetic",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -27,8 +27,7 @@
         "ext-curl": "*",
         "ext-json": "*",
         "ext-simplexml": "*",
-        "symfony/process": "~4.0",
-        "twig/extensions": "^1.5"
+        "symfony/process": "~4.0"
     },
     "conflict": {
         "twig/twig": "<1.27"
