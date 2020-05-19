@@ -1,19 +1,11 @@
-<?php
+<?php namespace Assetic\Extension\Twig;
 
-/*
- * This file is part of the Assetic package, an OpenSky project.
- *
- * (c) 2010-2014 OpenSky Project Inc
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+use Twig\Compiler;
+use Twig\Node\Expression\FunctionExpression;
 
-namespace Assetic\Extension\Twig;
-
-class AsseticFilterNode extends \Twig_Node_Expression_Function
+class AsseticFilterNode extends FunctionExpression
 {
-    protected function compileCallable(\Twig_Compiler $compiler)
+    protected function compileCallable(Compiler $compiler)
     {
         $compiler->raw(sprintf('$this->env->getExtension(\'Assetic\\Extension\\Twig\\AsseticExtension\')->getFilterInvoker(\'%s\')->invoke', $this->getAttribute('name')));
 

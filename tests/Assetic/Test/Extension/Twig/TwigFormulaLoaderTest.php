@@ -1,21 +1,17 @@
-<?php
+<?php namespace Assetic\Test\Extension\Twig;
 
-/*
- * This file is part of the Assetic package, an OpenSky project.
- *
- * (c) 2010-2014 OpenSky Project Inc
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-namespace Assetic\Test\Extension\Twig;
-
+use PHPUnit\Framework\TestCase;
+use Assetic\Contracts\Asset\AssetInterface;
+use Assetic\Contracts\Factory\Resource\ResourceInterface;
 use Assetic\Factory\AssetFactory;
+use Assetic\AssetManager;
+use Assetic\FilterManager;
 use Assetic\Extension\Twig\AsseticExtension;
 use Assetic\Extension\Twig\TwigFormulaLoader;
+use Twig\Environment;
+use Twig\Loader\ArrayLoader;
 
-class TwigFormulaLoaderTest extends \PHPUnit_Framework_TestCase
+class TwigFormulaLoaderTest extends TestCase
 {
     private $am;
     private $fm;
@@ -26,18 +22,18 @@ class TwigFormulaLoaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        if (!class_exists('Twig_Environment')) {
+        if (!class_exists('\Twig\Environment')) {
             $this->markTestSkipped('Twig is not installed.');
         }
 
-        $this->am = $this->getMockBuilder('Assetic\\AssetManager')->getMock();
-        $this->fm = $this->getMockBuilder('Assetic\\FilterManager')->getMock();
+        $this->am = $this->getMockBuilder(AssetManager::class)->getMock();
+        $this->fm = $this->getMockBuilder(FilterManager::class)->getMock();
 
         $factory = new AssetFactory(__DIR__.'/templates');
         $factory->setAssetManager($this->am);
         $factory->setFilterManager($this->fm);
 
-        $twig = new \Twig_Environment(new \Twig_Loader_Array(array()));
+        $twig = new Environment(new ArrayLoader(array()));
         $twig->addExtension(new AsseticExtension($factory, array(
             'some_func' => array(
                 'filter' => 'some_filter',
@@ -56,7 +52,7 @@ class TwigFormulaLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testMixture()
     {
-        $asset = $this->getMockBuilder('Assetic\\Asset\\AssetInterface')->getMock();
+        $asset = $this->getMockBuilder(AssetInterface::class)->getMock();
 
         $expected = array(
             'mixture' => array(
@@ -72,7 +68,7 @@ class TwigFormulaLoaderTest extends \PHPUnit_Framework_TestCase
             ),
         );
 
-        $resource = $this->getMockBuilder('Assetic\\Factory\\Resource\\ResourceInterface')->getMock();
+        $resource = $this->getMockBuilder(ResourceInterface::class)->getMock();
         $resource->expects($this->once())
             ->method('getContent')
             ->will($this->returnValue(file_get_contents(__DIR__.'/templates/mixture.twig')));
@@ -95,7 +91,7 @@ class TwigFormulaLoaderTest extends \PHPUnit_Framework_TestCase
             ),
         );
 
-        $resource = $this->getMockBuilder('Assetic\\Factory\\Resource\\ResourceInterface')->getMock();
+        $resource = $this->getMockBuilder(ResourceInterface::class)->getMock();
         $resource->expects($this->once())
             ->method('getContent')
             ->will($this->returnValue(file_get_contents(__DIR__.'/templates/function.twig')));
@@ -106,7 +102,7 @@ class TwigFormulaLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testUnclosedTag()
     {
-        $resource = $this->getMockBuilder('Assetic\\Factory\\Resource\\ResourceInterface')->getMock();
+        $resource = $this->getMockBuilder(ResourceInterface::class)->getMock();
         $resource->expects($this->once())
             ->method('getContent')
             ->will($this->returnValue(file_get_contents(__DIR__.'/templates/unclosed_tag.twig')));
@@ -131,7 +127,7 @@ class TwigFormulaLoaderTest extends \PHPUnit_Framework_TestCase
             ),
         );
 
-        $resource = $this->getMockBuilder('Assetic\\Factory\\Resource\\ResourceInterface')->getMock();
+        $resource = $this->getMockBuilder(ResourceInterface::class)->getMock();
         $resource->expects($this->once())
             ->method('getContent')
             ->will($this->returnValue(file_get_contents(__DIR__.'/templates/embed.twig')));
