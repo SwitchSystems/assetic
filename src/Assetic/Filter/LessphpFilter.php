@@ -20,9 +20,15 @@ class LessphpFilter extends BaseFilter implements DependencyExtractorInterface
 {
     private $presets = [];
     private $formatter;
+
+    private $preserveComments;
+    private $customFunctions = [];
+    private $variables = [];
+
     private $options = [
         'compress' => true
     ];
+
 
     /**
      * Lessphp Load Paths
@@ -68,6 +74,18 @@ class LessphpFilter extends BaseFilter implements DependencyExtractorInterface
     {
         $this->formatter = $formatter;
     }
+    
+    public function setVariables(array $variables)
+    {
+        foreach($variables as $name => $value) {
+            $this->addVariable($name, $value);
+        }
+    }
+
+    public function addVariable($name, $value)
+    {
+        $this->variables[$name] = $value;
+    }
 
     public function filterLoad(AssetInterface $asset)
     {
@@ -86,6 +104,10 @@ class LessphpFilter extends BaseFilter implements DependencyExtractorInterface
 
         if (method_exists($lc, 'setOptions') && count($this->options) > 0 ) {
         	$lc->setOptions($this->options);
+        }
+        
+        if (!empty($this->variables)) {
+            $lc->setVariables($this->variables);
         }
 
         $asset->setContent($lc->parse($asset->getContent(), $this->presets));
