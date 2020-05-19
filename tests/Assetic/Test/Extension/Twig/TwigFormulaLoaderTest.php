@@ -20,7 +20,7 @@ class TwigFormulaLoaderTest extends TestCase
      */
     private $loader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!class_exists('\Twig\Environment')) {
             $this->markTestSkipped('Twig is not installed.');
@@ -44,7 +44,7 @@ class TwigFormulaLoaderTest extends TestCase
         $this->loader = new TwigFormulaLoader($twig);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->am = null;
         $this->fm = null;
